@@ -9,7 +9,6 @@ class Game(QtGui.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
         self.background = None
-        self.count = 0
 
     def draw(self, qp):
         qp.setBrush(QtGui.QColor(178, 168, 158))
@@ -18,8 +17,6 @@ class Game(QtGui.QMainWindow, Ui_MainWindow):
         qp.begin(self)
         qp.drawPixmap(0, 0, self.background)
         qp.end()
-        self.count = self.count + 1
-        print "Count: " + str(self.count)
         self.update()
 
     def paintEvent(self, event):
