@@ -11,6 +11,9 @@ class Background():
     def generateBackground(self):
         painter = QPainter()
         painter.begin(self.data)
+        pen = QtGui.QPen()
+        pen.setStyle(0)
+        painter.setPen(pen)
         self.setBackgroundsBackground()
         self.drawGridBackground(painter)
         painter.end()
@@ -22,4 +25,5 @@ class Background():
     def drawGridBackground(self, painter):
         widthPart = self.width / 10
         heightPart = self.height / 15
-        painter.drawRoundRect(widthPart, heightPart, self.width - (widthPart * 2), self.height - (heightPart * 2))
+        painter.setBrush(QtGui.QColor(202, 192, 180))
+        painter.drawRoundedRect(widthPart, heightPart * 2, self.width - (widthPart * 2), self.height - (heightPart * 3), 30, 30)
