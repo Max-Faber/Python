@@ -1,14 +1,15 @@
 from PyQt4.QtGui import *
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
+from Color import Color
 
 class Background():
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.data = QPixmap(self.width, self.height)
+    def __init__(self, window):
+        self.window = window
+        self.data = None
         self.generateBackground()
 
-    def generateBackground(self):
+    def generateBackground(self, width, height):
+        self.data = QPixmap(width, height)
         painter = QPainter()
         painter.begin(self.data)
         pen = QtGui.QPen()
@@ -19,11 +20,18 @@ class Background():
         painter.end()
 
     def setBackgroundsBackground(self):
-        self.data.fill(QtGui.QColor(220, 220, 220))
-        #self.data.fill(QtGui.QColor(202, 192, 180))
+        self.data.fill(Color.widgetBackground)
 
     def drawGridBackground(self, painter):
-        widthPart = self.width / 10
-        heightPart = self.height / 15
-        painter.setBrush(QtGui.QColor(202, 192, 180))
-        painter.drawRoundedRect(widthPart, heightPart * 2, self.width - (widthPart * 2), self.height - (heightPart * 3), 30, 30)
+        x = self.getWidth() / 25.0
+        y = self.getHeight() / 5.0
+        width = self.getWidth() - (x * 2)
+        height = self.getHeight() - y - x
+        painter.setBrush(Color.gridBackground)
+        painter.drawRoundedRect(x, y, width, height, 10, 10)
+
+    def getWidth(self):
+        return self.window.geometry().width()
+
+    def getHeight(self):
+        return self.window.geometry().height()
