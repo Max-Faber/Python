@@ -6,7 +6,7 @@ class Background():
     def __init__(self, window):
         self.window = window
         self.data = None
-        self.generateBackground()
+        self.generateBackground(window.width(), window.height())
 
     def generateBackground(self, width, height):
         self.data = QPixmap(width, height)
@@ -31,7 +31,7 @@ class Background():
         painter.drawRoundedRect(x, y, width, height, 10, 10)
 
     def getWidth(self):
-        return self.window.geometry().width()
+        return self.window.width()
 
     def getHeight(self):
-        return self.window.geometry().height()
+        return self.window.height()

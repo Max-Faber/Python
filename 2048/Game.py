@@ -1,5 +1,7 @@
 from PyQt4 import QtGui, uic
+from PyQt4.QtGui import QSizePolicy
 from Color import Color
+import time
 
 uiFile = "mainwindow.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(uiFile)
@@ -9,42 +11,37 @@ class Game(QtGui.QMainWindow, Ui_MainWindow):
         QtGui.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
-        self.backgroundSet = False
+        #self.setMinimumWidth(250)
+        #self.setMinimumHeight(300)
         self.background = None
+        self.painter = None
 
-    def draw(self, qp):
-        if self.backgroundSet:
-            qp.setBrush(Color.emptyTile)
-            qp.drawRoundedRect(100, 400, 50, 50, 10, 10)
-            qp.end()
-            qp.begin(self)
-            qp.drawPixmap(0, 0, self.background.data)
-            qp.end()
+    def draw(self):
+        self.painter.setBrush(Color.emptyTile)
+        self.painter.drawRoundedRect(100, 400, 50, 50, 10, 10)
+        self.painter.end()
+        self.painter.begin(self)
+        self.painter.drawPixmap(0, 0, self.background.data)
+        self.painter.end()
 
     def paintEvent(self, event):
-        qp = QtGui.QPainter()
-        qp.begin(self.background.data)
+        self.painter = QtGui.QPainter()
+        self.painter.begin(self.background.data)
         pen = QtGui.QPen()
         pen.setStyle(0)
-        qp.setPen(pen)
-        self.draw(qp)
+        self.painter.setPen(pen)
+        self.draw()
 
     def resizeEvent(self, *args, **kwargs):
-        if self.checkRatio() is True:
-            self.background.generateBackground()
+        self.setMinimumHeight(self.width())
+        print str(self.minimumHeight())
+        self.background.generateBackground(self.width(), self.height())
+
+    def mouseReleaseEvent(self, *args, **kwargs):
+        if self.resized:
+            ratio = 5.0 / 6.0
+            self.background.generateBackground(self.width(), self.height())
+            self.resize(self.width(), self.width() / ratio)
 
     def setBackground(self, bg):
         self.background = bg
-        self.backgroundSet = True
-
-    def checkRatio(self):
-        wantedRatio = 5.0 / 6.0
-        width = self.width() * 1.0
-        height = self.height() * 1.0
-        actualRatio = width / height
-        if wantedRatio != actualRatio:
-            print "Width: " + str(width)
-            print "Height: " + str(width / wantedRatio)
-            print width / wantedRatio
-            self.resize(width, width / wantedRatio)
-            return True
