@@ -34,15 +34,24 @@ class Background():
 
     def drawEmptyTiles(self, painter):
         painter.setBrush(Color.emptyTile)
-        offset = 30
-        tilesPerRow = 3
+        offset = self.length / 60
+        tilesPerRow = 4
         tileLength = (self.length / tilesPerRow) - (offset * 2)
-        for tileX in xrange(0, 3):
-            for tileY in xrange(0, 3):
-                if tileX == 0:
-                    painter.drawRoundedRect(self.x, self.y, tileLength, tileLength, 10, 10)
+        drawCount = 0
+        for tileX in xrange(0, tilesPerRow):
+            for tileY in xrange(0, tilesPerRow):
+                if tileX == 0 and tileY == 0:
+                    painter.drawRoundedRect(offset + self.x, offset + self.y, tileLength, tileLength, 5, 5)
+                    drawCount += 1
+                    print drawCount
+                elif tileX == 0 and tileX + 1 != tilesPerRow:
+                    painter.drawRoundedRect(self.x + (tileLength + (offset * (tileX + 1))), self.y + (tileLength + (offset * (tileY + 1))), tileLength, tileLength, 5, 5)
+                    drawCount += 1
+                    print drawCount
+
+
                 #else:
-                 #   painter.drawRoundedRect(self.x + 30, self.y + 30)
+                #    painter.drawRoundedRect(offset + self.x + tileLength * (tileX + 1), offset + self.y + tileLength * (tileY + 1), tileLength, tileLength, 5, 5)
 
     def getWidth(self):
         return self.window.width()
