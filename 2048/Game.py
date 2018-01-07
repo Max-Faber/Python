@@ -1,24 +1,22 @@
-from PyQt4 import QtGui, uic
-from PyQt4.QtGui import QSizePolicy
+from PyQt4 import QtGui
 from Color import Color
-import time
+from PyQt4.QtGui import *
 
-uiFile = "mainwindow.ui"
-Ui_MainWindow, QtBaseClass = uic.loadUiType(uiFile)
-
-class Game(QtGui.QMainWindow, Ui_MainWindow):
-    def __init__(self):
-        QtGui.QMainWindow.__init__(self)
-        Ui_MainWindow.__init__(self)
-        self.setupUi(self)
-        #self.setMinimumWidth(250)
-        #self.setMinimumHeight(300)
+class Game(QWidget):
+    def __init__(self, window):
+        QWidget.__init__(self)
+        self.window = window
         self.background = None
         self.painter = None
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy.setHeightForWidth(True)
+        sizePolicy.setWidthForHeight(True)
+        self.setSizePolicy(sizePolicy)
+        self.setMinimumWidth(250)
+        self.setMinimumHeight(300)
 
     def draw(self):
         self.painter.setBrush(Color.emptyTile)
-        self.painter.drawRoundedRect(100, 400, 50, 50, 10, 10)
         self.painter.end()
         self.painter.begin(self)
         self.painter.drawPixmap(0, 0, self.background.data)
@@ -33,15 +31,12 @@ class Game(QtGui.QMainWindow, Ui_MainWindow):
         self.draw()
 
     def resizeEvent(self, *args, **kwargs):
-        self.setMinimumHeight(self.width())
-        print str(self.minimumHeight())
-        self.background.generateBackground(self.width(), self.height())
+        self.background.generateBackground(self.window.width(), self.window.height())
 
-    def mouseReleaseEvent(self, *args, **kwargs):
-        if self.resized:
-            ratio = 5.0 / 6.0
-            self.background.generateBackground(self.width(), self.height())
-            self.resize(self.width(), self.width() / ratio)
+    def heightForWidth(self, width):
+        ratio = 5.0 / 6.0
+        self.window.setMaximumHeight(width / ratio)
+        return width / ratio
 
     def setBackground(self, bg):
         self.background = bg
