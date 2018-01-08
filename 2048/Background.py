@@ -33,25 +33,24 @@ class Background():
         painter.drawRoundedRect(self.x, self.y, self.length, self.length, 10, 10)
 
     def drawEmptyTiles(self, painter):
+        print "Grid background (startX, startY, endX, endY): (" + str(self.x) + ", " + str(self.y) + ", " + str(self.x + self.length) + ", " + str(self.y + self.length) + ")"
         painter.setBrush(Color.emptyTile)
         offset = self.length / 60
+        rectRounding = self.length / 150
+        print rectRounding
+        print "Offset: " + str(offset)
         tilesPerRow = 4
-        tileLength = (self.length / tilesPerRow) - (offset * 2)
-        drawCount = 0
+        tileLength = (self.length / tilesPerRow) - (offset * (1.0 + (1.0 / tilesPerRow)))
+        rectCount = 0
         for tileX in xrange(0, tilesPerRow):
             for tileY in xrange(0, tilesPerRow):
-                if tileX == 0 and tileY == 0:
-                    painter.drawRoundedRect(offset + self.x, offset + self.y, tileLength, tileLength, 5, 5)
-                    drawCount += 1
-                    print drawCount
-                elif tileX == 0 and tileX + 1 != tilesPerRow:
-                    painter.drawRoundedRect(self.x + (tileLength + (offset * (tileX + 1))), self.y + (tileLength + (offset * (tileY + 1))), tileLength, tileLength, 5, 5)
-                    drawCount += 1
-                    print drawCount
-
-
-                #else:
-                #    painter.drawRoundedRect(offset + self.x + tileLength * (tileX + 1), offset + self.y + tileLength * (tileY + 1), tileLength, tileLength, 5, 5)
+                painter.drawRoundedRect(offset + self.x + (tileLength * tileX) + (offset * tileX), offset + self.y + (tileLength * tileY) + (offset * tileY), tileLength, tileLength, rectRounding, rectRounding)
+                rectCount += 1
+                startX = offset + self.x + (tileLength * tileX) + (offset * tileX)
+                startY = offset + self.y + (tileLength * tileY) + (offset * tileY)
+                endX = startX + tileLength
+                endY = startY + tileLength
+                print "Rect " + str(rectCount) + " (startX, startY, endX, endY): (" + str(startX) + ", " + str(startY) + ", " + str(endX) + ", " + str(endY) + ")"
 
     def getWidth(self):
         return self.window.width()

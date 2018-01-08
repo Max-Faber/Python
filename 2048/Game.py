@@ -10,7 +10,6 @@ class Game(QWidget):
         self.painter = None
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHeightForWidth(True)
-        #sizePolicy.setWidthForHeight(True)
         self.setSizePolicy(sizePolicy)
         self.setMinimumWidth(250)
         self.setMinimumHeight(300)

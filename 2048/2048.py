@@ -13,7 +13,6 @@ if __name__ == "__main__":
     game = Game(widget)
     background = Background(widget)
     game.setBackground(background)
-    game.resizeEvent()
     layout = QVBoxLayout()
     layout.setContentsMargins(0,0,0,0)
     layout.addWidget(game)
