@@ -9,6 +9,7 @@ class Background():
         self.x = None
         self.y = None
         self.length = None
+        self.grid = None
 
     def generateBackground(self, width, height):
         self.data = QPixmap(width, height)
@@ -29,8 +30,10 @@ class Background():
         self.x = self.getWidth() / 25.0
         self.y = self.getHeight() / 5.0
         self.length = self.getHeight() - self.y - self.x
+        rectRounding = self.length / 100
+        print rectRounding
         painter.setBrush(Color.gridBackground)
-        painter.drawRoundedRect(self.x, self.y, self.length, self.length, 10, 10)
+        painter.drawRoundedRect(self.x, self.y, self.length, self.length, rectRounding, rectRounding)
 
     def drawEmptyTiles(self, painter):
         print "Grid background (startX, startY, endX, endY): (" + str(self.x) + ", " + str(self.y) + ", " + str(self.x + self.length) + ", " + str(self.y + self.length) + ")"

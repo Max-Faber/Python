@@ -1,7 +1,6 @@
 import sys
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import *
-from PyQt4.QtCore import Qt
 from Game import Game
 from Background import Background
 
