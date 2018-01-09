@@ -27,11 +27,14 @@ class Background():
         self.data.fill(Color.widgetBackground)
 
     def drawGridBackground(self, painter):
-        self.x = self.getWidth() / 25.0
-        self.y = self.getHeight() / 5.0
-        self.length = self.getHeight() - self.y - self.x
+        number = (self.getWidth() / 100.0) * (self.getHeight() / 100.0)
+        ratio = (self.getWidth() * 1.0) / (self.getHeight() * 1.0)
+        temp = number * ratio
+        print "Temp: " + str(temp)
+        self.x = self.getWidth() / (temp)
+        self.length = self.getWidth() - (self.x * 2)
+        self.y = self.getHeight() - self.length - self.x
         rectRounding = self.length / 100
-        print rectRounding
         painter.setBrush(Color.gridBackground)
         painter.drawRoundedRect(self.x, self.y, self.length, self.length, rectRounding, rectRounding)
 
@@ -39,9 +42,8 @@ class Background():
         print "Grid background (startX, startY, endX, endY): (" + str(self.x) + ", " + str(self.y) + ", " + str(self.x + self.length) + ", " + str(self.y + self.length) + ")"
         painter.setBrush(Color.emptyTile)
         offset = self.length / 60
-        rectRounding = self.length / 150
-        print rectRounding
         print "Offset: " + str(offset)
+        rectRounding = self.length / 150
         tilesPerRow = 4
         tileLength = (self.length / tilesPerRow) - (offset * (1.0 + (1.0 / tilesPerRow)))
         rectCount = 0
@@ -60,3 +62,4 @@ class Background():
 
     def getHeight(self):
         return self.window.height()
+

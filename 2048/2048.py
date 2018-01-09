@@ -7,7 +7,7 @@ from Background import Background
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     widget = QWidget()
-    widget.resize(500, 600)
+    widget.resize(500, 700)
 
     game = Game(widget)
     background = Background(widget)

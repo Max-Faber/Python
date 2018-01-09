@@ -12,7 +12,6 @@ class Game(QWidget):
         sizePolicy.setHeightForWidth(True)
         self.setSizePolicy(sizePolicy)
         self.setMinimumWidth(250)
-        self.setMinimumHeight(300)
 
     def draw(self):
         self.painter.setBrush(Color.emptyTile)
@@ -31,9 +30,11 @@ class Game(QWidget):
 
     def resizeEvent(self, *args, **kwargs):
         self.background.generateBackground(self.window.width(), self.window.height())
+        print "Window Dimensions (x, y): (" + str(self.window.width()) + ", " + str(self.window.height()) + ")"
 
     def heightForWidth(self, width):
-        ratio = 5.0 / 6.0
+        ratio = 5.0 / 7.0
+        print "Setting maximum window height to " + str(width / ratio)
         self.window.setMaximumHeight(width / ratio)
         return width / ratio
 
