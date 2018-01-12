@@ -11,7 +11,7 @@ class Game(QWidget):
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHeightForWidth(True)
         self.setSizePolicy(sizePolicy)
-        self.setMinimumWidth(250)
+        self.setMinimumWidth(255)
 
     def draw(self):
         self.painter.setBrush(Color.emptyTile)
