@@ -27,11 +27,7 @@ class Background():
         self.data.fill(Color.widgetBackground)
 
     def drawGridBackground(self, painter):
-        number = (self.getWidth() / 100.0) * (self.getHeight() / 100.0)
-        ratio = (self.getWidth() * 1.0) / (self.getHeight() * 1.0)
-        temp = number * ratio
-        print "Temp: " + str(temp)
-        self.x = self.getWidth() / (temp)
+        self.x = self.getWidth() / (1.1)
         self.length = self.getWidth() - (self.x * 2)
         self.y = self.getHeight() - self.length - self.x
         rectRounding = self.length / 100
