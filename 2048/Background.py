@@ -11,7 +11,7 @@ class Background():
         self.y = None
         self.length = None
         self.tilesPerRow = 4
-        self.tiles = None
+        self.grid = None
 
     def generateBackground(self, width, height):
         self.data = QPixmap(width, height)
@@ -43,12 +43,12 @@ class Background():
         rectRounding = self.length / 150
         tileLength = (self.length / self.tilesPerRow) - (offset * (1.0 + (1.0 / self.tilesPerRow)))
         rectCount = 0
-        self.tiles = []
+        self.grid = []
         for tileX in xrange(0, self.tilesPerRow):
             for tileY in xrange(0, self.tilesPerRow):
                 startX = offset + self.x + (tileLength * tileX) + (offset * tileX)
                 startY = offset + self.y + (tileLength * tileY) + (offset * tileY)
-                self.tiles.append(Tile(startX, startY, tileLength, rectRounding))
+                self.grid.append(tileX, tileY, startX, startY)
                 painter.drawRoundedRect(startX, startY, tileLength, tileLength, rectRounding, rectRounding)
                 rectCount += 1
                 endX = startX + tileLength

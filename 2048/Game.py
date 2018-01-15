@@ -18,6 +18,7 @@ class Game(QWidget):
         self.painter.end()
         self.painter.begin(self)
         self.painter.drawPixmap(0, 0, self.background.data)
+        self.painter.drawRect(50, 50, 50, 50)
         self.painter.end()
 
     def paintEvent(self, event):
