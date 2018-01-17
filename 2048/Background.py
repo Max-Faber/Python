@@ -1,7 +1,7 @@
 from PyQt4.QtGui import *
 from PyQt4 import QtGui
 from Color import Color
-from Tile import Tile
+import numpy
 
 class Background():
     def __init__(self, window):
@@ -11,7 +11,7 @@ class Background():
         self.y = None
         self.length = None
         self.tilesPerRow = 4
-        self.grid = None
+        self.grid = numpy.matrix([[]])
 
     def generateBackground(self, width, height):
         self.data = QPixmap(width, height)
@@ -43,12 +43,13 @@ class Background():
         rectRounding = self.length / 150
         tileLength = (self.length / self.tilesPerRow) - (offset * (1.0 + (1.0 / self.tilesPerRow)))
         rectCount = 0
-        self.grid = []
         for tileX in xrange(0, self.tilesPerRow):
             for tileY in xrange(0, self.tilesPerRow):
                 startX = offset + self.x + (tileLength * tileX) + (offset * tileX)
                 startY = offset + self.y + (tileLength * tileY) + (offset * tileY)
-                self.grid.append(tileX, tileY, startX, startY)
+                newrow = [tileX, tileY]
+                numpy.insert(self.grid, tileX, tileY)
+                print self.grid
                 painter.drawRoundedRect(startX, startY, tileLength, tileLength, rectRounding, rectRounding)
                 rectCount += 1
                 endX = startX + tileLength
