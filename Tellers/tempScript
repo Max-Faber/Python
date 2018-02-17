@@ -5,14 +5,11 @@ import RPi.GPIO as GPIO
 from Wheel import Wheel
 import thread
 import time
-import math
-from astral import Astral
 
-def initWheels():
-    wheelTen = Wheel(5, 13, "Wheel Ten", 16, 20)
-    wheelOne = Wheel(6, 19, "Wheel One", 16, 20)
-    wheelDecimal = Wheel(21, 26, "Wheel Decimal", 16, 20)
-    wheelArray = [wheelTen, wheelOne, wheelDecimal]
+def init():
+    wheelOne = Wheel(6, 19, "Wheel One")
+    wheelTen = Wheel(5, 13, "Wheel Ten")
+    wheelArray = [wheelOne, wheelTen]
     initGPIO(wheelArray)
     for wheel in wheelArray:
         print "Initializing " + wheel.wheelName
@@ -35,72 +32,35 @@ def initGPIO(wheels):
     for wheel in wheels:
         GPIO.setup(wheel.output, GPIO.OUT)
         GPIO.setup(wheel.input, GPIO.IN,  pull_up_down=GPIO.PUD_DOWN)
-        GPIO.setup(wheel.errorLED1, GPIO.OUT)
-        GPIO.setup(wheel.errorLED2, GPIO.OUT)
         GPIO.output(wheel.output, GPIO.LOW)
-        GPIO.output(wheel.errorLED1, GPIO.LOW)
-        GPIO.output(wheel.errorLED2, GPIO.LOW)
 
 def getOnes(number):
-    if number < 0:
-        number = number * -1
-    return int(number % 10)
+    return int(round(number % 10))
 
 def getTens(number):
-    if number < 0:
-        number = number * -1
     return int(round(number // 10))
 
-def getDecimals(number):
-    if number < 0:
-        number = number * -1
-    frac = math.modf(number)[0]
-    return int(round(frac * 10))
-
-def getNumbers(numbers):
-    print "Ones: " + str(getOnes(numbers))
-    print "Tens: " + str(getTens(numbers))
-    print "Fraction: " +str(getDecimals(numbers))
-
-def update(wheels, temperature, humidity):
+def update(wheels):
+    humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
     for wheel in wheels:
-        print "Updating " + wheel.wheelName
         if wheel.wheelName == "Wheel One":
             wheel.setWheel(getOnes(temperature))
         elif wheel.wheelName == "Wheel Ten":
             wheel.setWheel(getTens(temperature))
-        elif wheel.wheelName == "Wheel Decimal":
-            wheel.setWheel(getDecimals(temperature))
     sendData(temperature, humidity)
-
-def checkFreezing(isFreezing, temperature):
-    if(temperature < 0):
-        GPIO.output(minus_LED, GPIO.HIGH)
-        return True;
-    elif(isFreezing == True):
-        GPIO.output(minus_LED, GPIO.LOW)
-        return False
-    else:
-        return False
 
 sensor = Adafruit_DHT.AM2302
 pin = 12
 minute = 60
-wheel_lights = 16
-minus_LED = 20
-isFreezing = False
-temp = 3
 
 humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 
 try:
     if humidity is not None and temperature is not None:
-        wheels = initWheels()
+        wheels = init()
         while True:
-            humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
-            isFreezing = checkFreezing(isFreezing, temperature)
-            update(wheels, temperature, humidity)
-            time.sleep(minute * 0.2)
+            update(wheels)
+            time.sleep(minute * 5)
     else:
         print('Failed to get reading. Try again!')
         sys.exit(1)
