@@ -2,7 +2,7 @@ from random import randint
 
 class Tile():
     def __init__(self, x, y, length, rectRounding):
-        self.value = self.generateNewValue()
+        self.value = None
         self.x = x
         self.y = y
         self.rectRounding = rectRounding

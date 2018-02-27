@@ -1,7 +1,7 @@
 from PyQt4.QtGui import *
 from PyQt4 import QtGui
 from Color import Color
-import numpy
+from Tile import Tile
 
 class Background():
     def __init__(self, window):
@@ -11,7 +11,7 @@ class Background():
         self.y = None
         self.length = None
         self.tilesPerRow = 4
-        self.grid = numpy.matrix([[]])
+        self.grid = [[None for y in xrange(4)] for x in xrange(4)]
 
     def generateBackground(self, width, height):
         self.data = QPixmap(width, height)
@@ -20,6 +20,7 @@ class Background():
         pen = QtGui.QPen()
         pen.setStyle(0)
         painter.setPen(pen)
+        painter.setRenderHint(QPainter.Antialiasing)
         self.setBackgroundsBackground()
         self.drawGridBackground(painter)
         self.drawEmptyTiles(painter)
@@ -37,7 +38,6 @@ class Background():
         painter.drawRoundedRect(self.x, self.y, self.length, self.length, rectRounding, rectRounding)
 
     def drawEmptyTiles(self, painter):
-        print "Grid background (startX, startY, endX, endY): ({}, {}, {}, {})".format(self.x, self.y, self.x + self.length, self.y + self.length)
         painter.setBrush(Color.emptyTile)
         offset = self.length / 60
         rectRounding = self.length / 150
@@ -47,17 +47,21 @@ class Background():
             for tileY in xrange(0, self.tilesPerRow):
                 startX = offset + self.x + (tileLength * tileX) + (offset * tileX)
                 startY = offset + self.y + (tileLength * tileY) + (offset * tileY)
-                newrow = [tileX, tileY]
-                numpy.insert(self.grid, tileX, tileY)
-                print self.grid
                 painter.drawRoundedRect(startX, startY, tileLength, tileLength, rectRounding, rectRounding)
                 rectCount += 1
-                endX = startX + tileLength
-                endY = startY + tileLength
-                print "Tile background {0:2} (startX, startY, endX, endY): ({1:7.3f}, {2:7.3f}, {3:7.3f}, {4:7.3f})".format(rectCount, startX, startY, endX, endY)
+                if self.grid[tileX][tileY] is None:
+                    self.grid[tileX][tileY] = Tile(startX, startY, tileLength, rectRounding)
+                else:
+                    self.grid[tileX][tileY].x = startX
+                    self.grid[tileX][tileY].y = startY
+                    self.grid[tileX][tileY].length = tileLength
+                    self.grid[tileX][tileY].rectRounding = rectRounding
 
     def getWidth(self):
         return self.window.width()
 
     def getHeight(self):
         return self.window.height()
+
+    def getGrid(self):
+        return self.grid
