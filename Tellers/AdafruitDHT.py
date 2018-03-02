@@ -73,23 +73,17 @@ def update(wheels, temperature, humidity):
             wheel.setWheel(getDecimals(temperature))
     sendData(temperature, humidity)
 
-def checkFreezing(isFreezing, temperature):
+def checkFreezing(temperature):
     if(temperature < 0):
         GPIO.output(minus_LED, GPIO.HIGH)
-        return True;
-    elif(isFreezing == True):
-        GPIO.output(minus_LED, GPIO.LOW)
-        return False
     else:
-        return False
+        GPIO.output(minus_LED, GPIO.LOW)
 
 sensor = Adafruit_DHT.AM2302
 pin = 12
 minute = 60
 wheel_lights = 16
 minus_LED = 20
-isFreezing = False
-temp = 3
 
 humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 
@@ -98,9 +92,9 @@ try:
         wheels = initWheels()
         while True:
             humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
-            isFreezing = checkFreezing(isFreezing, temperature)
+            checkFreezing(temperature)
             update(wheels, temperature, humidity)
-            time.sleep(minute * 0.2)
+            time.sleep(minute * 5)
     else:
         print('Failed to get reading. Try again!')
         sys.exit(1)

@@ -16,6 +16,7 @@ if __name__ == "__main__":
     layout.setContentsMargins(0,0,0,0)
     layout.addWidget(game)
     widget.setLayout(layout)
+    widget.setFocusPolicy(QtCore.Qt.ClickFocus)
     widget.setWindowTitle("2048")
     widget.setWindowFlags(QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
     widget.show()
