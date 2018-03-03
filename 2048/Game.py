@@ -72,6 +72,8 @@ class Game(QWidget):
         elif event.key() == QtCore.Qt.Key_Space:
             row = [16, 8, 8, 4]
             self.combineRow(row)
+            row = [4, 4, 8, 4]
+            self.combineRow(row)
 
     def gridsAreEqual(self, grid, grid2):
         xMax = len(self.grid)
@@ -127,7 +129,7 @@ class Game(QWidget):
 
         for tileY in range(yMax):
             row = []
-            for tileX in range(xMax - 1, -1 , -1):
+            for tileX in range(xMax - 1, -1, -1):
                 row.append(self.grid[tileX][tileY].value)
             row = self.combineRow(row)
             for i in range(len(row)):
@@ -136,16 +138,20 @@ class Game(QWidget):
     def combineRow(self, row):
         print "Start row: " + str(row)
         for i in range(len(row)):
-            if row[i] is not None:
-                for j in range(len(row)):
-                    if j < i:
-                        if row[j] is None:
-                            row[j] = row[i]
-                            row[i] = None
-                        elif row[j] is not None:
-                            if row[j] == row[i] and j != i and self.selectionIsEmpty(row, j, i):
-                                row[j] = row[j] + row[i]
-                                row[i] = None
+            if row[i] is None:
+                for j in range(0, i):
+                    if row[j] is not None:
+                        row[i] = row[j]
+                        row[j] = None
+            #if row[i] is not None:
+            #    for j in range(i):
+            #        if row[j] is None:
+            #            row[j] = row[i]
+            #            row[i] = None
+            #        elif row[j] is not None:
+            #            if row[j] == row[i] and self.selectionIsEmpty(row, j, i):
+            #                row[j] = row[j] + row[i]
+            #                row[i] = None
         print "End row: " + str(row) + "\n"
         return row
 
