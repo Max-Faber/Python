@@ -2,6 +2,7 @@ from Color import Color
 from PyQt4.QtGui import *
 from random import randint
 from PyQt4 import QtGui, QtCore
+import copy
 
 class Game(QWidget):
     def __init__(self, window):
@@ -42,24 +43,47 @@ class Game(QWidget):
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Up:
             print "Up"
+            gridBefore = copy.deepcopy(self.grid)
             self.moveGridUp()
-            self.newTile(1)
-            self.repaint()
+            if not self.gridsAreEqual(gridBefore, self.grid):
+                self.newTile(1)
+                self.repaint()
         elif event.key() == QtCore.Qt.Key_Down:
             print "Down"
+            gridBefore = copy.deepcopy(self.grid)
             self.moveGridDown()
-            self.newTile(1)
-            self.repaint()
+            if not self.gridsAreEqual(gridBefore, self.grid):
+                self.newTile(1)
+                self.repaint()
         elif event.key() == QtCore.Qt.Key_Left:
             print "Left"
+            gridBefore = copy.deepcopy(self.grid)
             self.moveGridLeft()
-            self.newTile(1)
-            self.repaint()
+            if not self.gridsAreEqual(gridBefore, self.grid):
+                self.newTile(1)
+                self.repaint()
         elif event.key() == QtCore.Qt.Key_Right:
             print "Right"
+            gridBefore = copy.deepcopy(self.grid)
             self.moveGridRight()
-            self.newTile(1)
-            self.repaint()
+            if not self.gridsAreEqual(gridBefore, self.grid):
+                self.newTile(1)
+                self.repaint()
+        elif event.key() == QtCore.Qt.Key_Space:
+            row = [16, 8, 8, 4]
+            self.combineRow(row)
+
+    def gridsAreEqual(self, grid, grid2):
+        xMax = len(self.grid)
+        yMax = len(self.grid[len(self.grid) - 1])
+
+        for tileX in range(xMax):
+            for tileY in range(yMax):
+                if grid[tileX][tileY].value is not grid2[tileX][tileY].value:
+                    #print "Not equal"
+                    return False
+        #print "Equal"
+        return True
 
     def moveGridUp(self):
         xMax = len(self.grid)
@@ -114,18 +138,18 @@ class Game(QWidget):
         for i in range(len(row)):
             if row[i] is not None:
                 for j in range(len(row)):
-                    if row[j] is None and j < i:
-                        row[j] = row[i]
-                        row[i] = None
-                    elif row[j] is not None:
-                        if row[j] == row[i] and j != i and self.selectionIsEmpty(row, j, i):
-                            row[j] = row[j] + row[i]
+                    if j < i:
+                        if row[j] is None:
+                            row[j] = row[i]
                             row[i] = None
+                        elif row[j] is not None:
+                            if row[j] == row[i] and j != i and self.selectionIsEmpty(row, j, i):
+                                row[j] = row[j] + row[i]
+                                row[i] = None
         print "End row: " + str(row) + "\n"
         return row
 
     def selectionIsEmpty(self, row, begin, end):
-        print "Selection: " + str(begin) + ", " + str(end)
         if begin > end:
             begin, end = self.swap(begin, end)
         for i in range(begin + 1, end):
@@ -162,13 +186,14 @@ class Game(QWidget):
                                                  self.grid[tileX][tileY].rectRounding,
                                                  self.grid[tileX][tileY].rectRounding)
                     self.painter.setPen(QtGui.QColor(0, 0, 0))
-                    self.painter.setFont(QtGui.QFont('clear-sans',30))
+                    self.painter.setFont(QtGui.QFont('clear-sans', 30))
                     self.painter.drawText(self.grid[tileX][tileY].x,
                                           self.grid[tileX][tileY].y,
                                           self.grid[tileX][tileY].length,
                                           self.grid[tileX][tileY].length,
                                           QtCore.Qt.AlignCenter,
                                           str(self.grid[tileX][tileY].value))
+                    self.painter.setPen(0)
 
     def newTile(self, tileCount):
         for count in range(tileCount):
