@@ -42,28 +42,24 @@ class Game(QWidget):
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Up:
-            print "Up"
             gridBefore = copy.deepcopy(self.grid)
             self.moveGridUp()
             if not self.gridsAreEqual(gridBefore, self.grid):
                 self.newTile(1)
                 self.repaint()
         elif event.key() == QtCore.Qt.Key_Down:
-            print "Down"
             gridBefore = copy.deepcopy(self.grid)
             self.moveGridDown()
             if not self.gridsAreEqual(gridBefore, self.grid):
                 self.newTile(1)
                 self.repaint()
         elif event.key() == QtCore.Qt.Key_Left:
-            print "Left"
             gridBefore = copy.deepcopy(self.grid)
             self.moveGridLeft()
             if not self.gridsAreEqual(gridBefore, self.grid):
                 self.newTile(1)
                 self.repaint()
         elif event.key() == QtCore.Qt.Key_Right:
-            print "Right"
             gridBefore = copy.deepcopy(self.grid)
             self.moveGridRight()
             if not self.gridsAreEqual(gridBefore, self.grid):
@@ -138,20 +134,23 @@ class Game(QWidget):
     def combineRow(self, row):
         print "Start row: " + str(row)
         for i in range(len(row)):
-            if row[i] is None:
-                for j in range(0, i):
-                    if row[j] is not None:
-                        row[i] = row[j]
-                        row[j] = None
-            #if row[i] is not None:
-            #    for j in range(i):
-            #        if row[j] is None:
-            #            row[j] = row[i]
-            #            row[i] = None
-            #        elif row[j] is not None:
-            #            if row[j] == row[i] and self.selectionIsEmpty(row, j, i):
-            #                row[j] = row[j] + row[i]
-            #                row[i] = None
+
+        #    if row[i] is None:
+        #        for j in range(0, i):
+        #            if row[j] is not None:
+        #                row[i] = row[j]
+        #                row[j] = None
+            if row[i] is not None:
+               for j in range(i):
+                    if row[j] is None:
+                        row[j] = row[i]
+                        row[i] = None
+                    elif row[j] is not None:
+                        if row[j] == row[i] and self.selectionIsEmpty(row, j, i):
+                            row[j] = row[j] + row[i]
+                            for k in range(i, len(row) - 1):
+                                row[k] = row[k + 1]
+                            row[len(row) - 1] = None
         print "End row: " + str(row) + "\n"
         return row
 
