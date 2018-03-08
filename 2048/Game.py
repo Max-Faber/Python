@@ -78,9 +78,7 @@ class Game(QWidget):
         for tileX in range(xMax):
             for tileY in range(yMax):
                 if grid[tileX][tileY].value is not grid2[tileX][tileY].value:
-                    #print "Not equal"
                     return False
-        #print "Equal"
         return True
 
     def moveGridUp(self):
@@ -134,12 +132,6 @@ class Game(QWidget):
     def combineRow(self, row):
         print "Start row: " + str(row)
         for i in range(len(row)):
-
-        #    if row[i] is None:
-        #        for j in range(0, i):
-        #            if row[j] is not None:
-        #                row[i] = row[j]
-        #                row[j] = None
             if row[i] is not None:
                for j in range(i):
                     if row[j] is None:
