@@ -21,4 +21,4 @@ class Color():
         elif number == 128 or number == 256 or number == 512:
             return QtGui.QColor(237, 207, 114)
         else:
-            return QtGui.QColor(0, 0, 0)
+            return QtGui.QColor(255, 255, 255)
