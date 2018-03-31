@@ -75,15 +75,17 @@ def update(wheels, temperature, humidity):
 
 def checkFreezing(temperature):
     if(temperature < 0):
+        print "Freezing"
         GPIO.output(minus_LED, GPIO.HIGH)
     else:
+        print "Not freezing"
         GPIO.output(minus_LED, GPIO.LOW)
 
 sensor = Adafruit_DHT.AM2302
 pin = 12
 minute = 60
-wheel_lights = 16
-minus_LED = 20
+minus_LED = 16
+wheel_lights = 20
 
 humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 
