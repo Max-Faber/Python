@@ -1,8 +1,16 @@
 from Color import Color
-from PyQt4.QtGui import *
+from PyQt6.QtWidgets import QWidget, QSizePolicy
 from random import randint
-from PyQt4 import QtGui, QtCore
+from PyQt6 import QtGui, QtCore
 import copy
+
+
+def swap(numb, numb2):
+    temp = numb
+    numb = numb2
+    numb2 = temp
+    return numb, numb2
+
 
 class Game(QWidget):
     def __init__(self, window):
@@ -11,11 +19,11 @@ class Game(QWidget):
         self.background = None
         self.grid = None
         self.painter = None
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHeightForWidth(True)
         self.setSizePolicy(sizePolicy)
         self.setMinimumWidth(250)
-        self.setFocusPolicy(QtCore.Qt.StrongFocus)
+        self.setFocusPolicy(QtCore.Qt.FocusPolicy.StrongFocus)
 
     def draw(self):
         self.painter.setBrush(Color.emptyTile)
@@ -30,7 +38,7 @@ class Game(QWidget):
         self.painter = QtGui.QPainter()
         self.painter.begin(self.background.data)
         pen = QtGui.QPen()
-        pen.setStyle(0)
+        pen.setStyle(QtCore.Qt.PenStyle.SolidLine)
         self.painter.setPen(pen)
         self.draw()
 
@@ -41,31 +49,31 @@ class Game(QWidget):
             self.newTile(2)
 
     def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Up:
+        if event.key() == QtCore.Qt.Key.Key_Up:
             gridBefore = copy.deepcopy(self.grid)
             self.moveGridUp()
             if not self.gridsAreEqual(gridBefore, self.grid):
                 self.newTile(1)
                 self.repaint()
-        elif event.key() == QtCore.Qt.Key_Down:
+        elif event.key() == QtCore.Qt.Key.Key_Down:
             gridBefore = copy.deepcopy(self.grid)
             self.moveGridDown()
             if not self.gridsAreEqual(gridBefore, self.grid):
                 self.newTile(1)
                 self.repaint()
-        elif event.key() == QtCore.Qt.Key_Left:
+        elif event.key() == QtCore.Qt.Key.Key_Left:
             gridBefore = copy.deepcopy(self.grid)
             self.moveGridLeft()
             if not self.gridsAreEqual(gridBefore, self.grid):
                 self.newTile(1)
                 self.repaint()
-        elif event.key() == QtCore.Qt.Key_Right:
+        elif event.key() == QtCore.Qt.Key.Key_Right:
             gridBefore = copy.deepcopy(self.grid)
             self.moveGridRight()
             if not self.gridsAreEqual(gridBefore, self.grid):
                 self.newTile(1)
                 self.repaint()
-        elif event.key() == QtCore.Qt.Key_Space:
+        elif event.key() == QtCore.Qt.Key.Key_Space:
             row = [16, 8, 8, 4]
             self.combineRow(row)
             row = [4, 4, 8, 4]
@@ -130,10 +138,10 @@ class Game(QWidget):
                 self.grid[len(row) - 1 - i][tileY].value = row[i]
 
     def combineRow(self, row):
-        print "Start row: " + str(row)
+        print("Start row: " + str(row))
         for i in range(len(row)):
             if row[i] is not None:
-               for j in range(i):
+                for j in range(i):
                     if row[j] is None:
                         row[j] = row[i]
                         row[i] = None
@@ -143,22 +151,16 @@ class Game(QWidget):
                             for k in range(i, len(row) - 1):
                                 row[k] = row[k + 1]
                             row[len(row) - 1] = None
-        print "End row: " + str(row) + "\n"
+        print("End row: " + str(row) + "\n")
         return row
 
     def selectionIsEmpty(self, row, begin, end):
         if begin > end:
-            begin, end = self.swap(begin, end)
+            begin, end = swap(begin, end)
         for i in range(begin + 1, end):
             if row[i] is not None:
                 return False
         return True
-
-    def swap(self, numb, numb2):
-        temp = numb
-        numb = numb2
-        numb2 = temp
-        return numb, numb2
 
     def heightForWidth(self, width):
         ratio = 5.0 / 7.0
@@ -188,7 +190,7 @@ class Game(QWidget):
                                           self.grid[tileX][tileY].y,
                                           self.grid[tileX][tileY].length,
                                           self.grid[tileX][tileY].length,
-                                          QtCore.Qt.AlignCenter,
+                                          QtCore.Qt.AlignmentFlag.AlignCenter,
                                           str(self.grid[tileX][tileY].value))
                     self.painter.setPen(0)
 
@@ -219,9 +221,8 @@ class Game(QWidget):
         yMax = len(self.grid[len(self.grid) - 1])
         emptyTileCount = 0
 
-        for tileX in xrange(0, xMax):
-            for tileY in xrange(0, yMax):
+        for tileX in range(0, xMax):
+            for tileY in range(0, yMax):
                 if self.grid[tileX][tileY].value is None:
                     emptyTileCount += 1
         return emptyTileCount
-

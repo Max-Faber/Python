@@ -1,6 +1,7 @@
 from random import randint
 
-class Tile():
+
+class Tile:
     def __init__(self, x, y, length, rectRounding):
         self.value = None
         self.x = x
